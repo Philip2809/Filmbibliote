@@ -23,8 +23,8 @@ namespace Filmbibliote.Pages
 
         public async Task OnGetAsync()
         {
-            Film = await _context.Filmer
-                .Include(f => f.User).ToListAsync();
+            Film = await _context.Filmer.ToListAsync();
+            Console.WriteLine(Film.Count);
         }
     }
 }

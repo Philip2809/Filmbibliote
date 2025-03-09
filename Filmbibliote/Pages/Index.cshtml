@@ -26,7 +26,7 @@
                 @Html.DisplayNameFor(model => model.Film[0].Betyg)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Film[0].User)
+                @Html.DisplayNameFor(model => model.Film[0].UserID)
             </th>
             <th></th>
         </tr>
@@ -47,7 +47,7 @@
                 @Html.DisplayFor(modelItem => item.Betyg)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
+                @Html.DisplayFor(modelItem => item.UserID)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.FilmID">Edit</a> |

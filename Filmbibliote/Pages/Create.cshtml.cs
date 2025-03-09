@@ -7,37 +7,33 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Filmbibliote.Data;
 using Filmbibliote.Modeller;
+using Microsoft.AspNetCore.Identity;
 
 namespace Filmbibliote.Pages
 {
-    public class CreateModel : PageModel
+    public class CreateModel(UserManager<IdentityUser> userManager, ApplicationDbContext context) : BaseLoggedInPageModel(userManager, context)
     {
-        private readonly Filmbibliote.Data.ApplicationDbContext _context;
-
-        public CreateModel(Filmbibliote.Data.ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        public IActionResult OnGet()
-        {
-        ViewData["UserID"] = new SelectList(_context.Set<User>(), "Id", "Id");
-            return Page();
-        }
-
         [BindProperty]
         public Film Film { get; set; } = default!;
+        public IActionResult OnGet()
+        {
+            return Page();
+        }
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            await LoadCurrentUserAsync();
+
+            if (!ModelState.IsValid || CurrentUser == null)
             {
                 return Page();
             }
 
-            _context.Filmer.Add(Film);
-            await _context.SaveChangesAsync();
+            Film.UserID = CurrentUser.Id;
+
+            dbContext.Filmer.Add(Film);
+            await dbContext.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }
